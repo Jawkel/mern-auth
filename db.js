@@ -14,3 +14,12 @@ export default function (func) {
     }).then(func)
         .catch(err => console.log(`${err} did not connect`));
 }
+
+export const mongoosePromise = mongoose.connect(process.env.MONGO_URI, {
+    connectTimeoutMS: 3000,
+    socketTimeoutMS: 20000,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+});
