@@ -15,4 +15,7 @@ app.use(express.urlencoded({limit: "10mb", extended: true}));
 app.use(cors({credentials: true, origin: `http://localhost:${process.env.CLIENT_PORT}`}));
 app.use(cookieParser());
 
+app.use('/user', userRouter);
+
+
 conn(() => app.listen(process.env.PORT, () => console.log(`Server Running on Port: http://localhost:${process.env.PORT}`)));
