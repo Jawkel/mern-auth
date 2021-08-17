@@ -22,7 +22,6 @@ export const useAuth = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // console.log(formData);
         if (isSignup) {
             dispatch(signup(formData, history));
         } else {
@@ -37,32 +36,13 @@ export const useAuth = () => {
 
     const switchMode = () => {
         setIsSignup(prevState => !prevState);
-        // handleShowPassword(false);
     };
-
-    // const googleSuccess = async (res) => {
-    //     const result = res?.profileObj;
-    //     console.log(result);
-    //     const token = res?.tokenId;
-    //
-    //     try {
-    //         dispatch({type: 'AUTH', data: {result, token}});
-    //         history.push('/');
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
-    // const googleFailure = () => {
-    //     console.log("Google Sign In went wrong. Try again later");
-    // };
 
     return {
         error,
         isSignup,
-        // showPassword,
         switchMode,
         handleSubmit,
         handleChange,
-        // handleShowPassword
     };
 };

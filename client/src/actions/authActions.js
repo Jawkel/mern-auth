@@ -1,16 +1,13 @@
-import {AUTH, AUTH_ERROR} from "../constants/actionTypes";
+import {AUTH, AUTH_ERROR, LOGOUT} from "../constants/actionTypes";
 import * as api from "../api/index.js";
 
 export const signin = (formData, history) => async (dispatch, getState) => {
     try {
         // login the user
         const {data} = await api.signIn(formData);
-        console.log("DATA Received:", data);
 
-        // localStorage.setItem('user', JSON.stringify(data.user));
         dispatch({type: AUTH, data: {user: data.user, token: data.accessToken}});
-
-        // history.push('/lol');
+        history.push('/');
     } catch (e) {
         let data = {
             result: {},
@@ -23,10 +20,8 @@ export const signin = (formData, history) => async (dispatch, getState) => {
 export const signup = (formData, history) => async (dispatch) => {
     try {
         const {data} = await api.signUp(formData);
-        console.log("DATA MF!", data);
 
         dispatch({type: AUTH, data});
-
         history.push('/');
     } catch (e) {
         let data = {
@@ -35,7 +30,6 @@ export const signup = (formData, history) => async (dispatch) => {
             errors: e?.response.data.message
         };
         dispatch({type: AUTH, data});
-        // console.log(e);
     }
 };
 
@@ -44,7 +38,6 @@ export const refresh = () => async (dispatch) => {
         // 3 retries
         dispatch({type: AUTH_ERROR, data: {}});
         const {data} = await api.refresh();
-        localStorage.setItem('user', JSON.stringify(data.user));
         dispatch({type: AUTH, data: {user: data.user, token: data.accessToken}});
         // Successful -> setting retry back to 3
         dispatch({type: AUTH_ERROR, data: {retry: 3}});
@@ -53,13 +46,10 @@ export const refresh = () => async (dispatch) => {
     }
 };
 
-// export const retry = () => async (dispatch) => {
-//
-// }
-
 export const logout = () => async (dispatch) => {
     try {
         await api.logout();
+        dispatch({type: LOGOUT});
     } catch (e) {
         console.log("-> e", e);
     }

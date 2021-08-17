@@ -1,16 +1,22 @@
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {createGlobalStyle} from "styled-components";
 import './App.css';
 import Auth from "./components/Auth/Auth";
-import {useSelector} from "react-redux";
-import {Paper} from "@material-ui/core";
+import Authenticated from "./components/Authenticated";
+import NavBar from "./components/Navbar/Navbar";
+import PrivateRoute from "./components/PrivateRoute";
 
 export default function App() {
-    const user = useSelector(state => state.auth);
-    console.log(user);
     return (
         <div className="App">
-            <GlobalStyle/>
-            {user?.email ? <Auth/> : <Paper><h2>Authenticated</h2></Paper>}
+            <Router>
+                <GlobalStyle/>
+                <NavBar/>
+                <Switch>
+                    <PrivateRoute path="/" exact component={Authenticated}/>
+                    <Route path="/login" exact component={Auth}/>
+                </Switch>
+            </Router>
         </div>
     );
 }
