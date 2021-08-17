@@ -5,6 +5,8 @@ import conn from "./db.js";
 import dotenv from "dotenv";
 
 import userRoutes from "./routes/userRoute.js";
+import testMiddlewareRoute from "./routes/testMiddlewareRoute.js";
+import authMiddleware from "./middlewares/authMiddleware.js";
 
 dotenv.config();
 
@@ -18,6 +20,7 @@ app.use(cors({credentials: true, origin: `http://localhost:${process.env.CLIENT_
 app.use(cookieParser());
 
 app.use('/user', userRoutes);
+app.use('/api/test-middleware-auth', authMiddleware, testMiddlewareRoute);
 
 
 conn(() => app.listen(process.env.PORT, () => console.log(`Server Running on Port: http://localhost:${process.env.PORT}`)));
