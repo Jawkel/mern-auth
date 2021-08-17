@@ -1,25 +1,43 @@
-import logo from './logo.svg';
+import {createGlobalStyle} from "styled-components";
 import './App.css';
+import Auth from "./components/Auth/Auth";
+import {useSelector} from "react-redux";
+import {Paper} from "@material-ui/core";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default function App() {
+    const user = useSelector(state => state.auth);
+    console.log(user);
+    return (
+        <div className="App">
+            <GlobalStyle/>
+            {user?.email ? <Auth/> : <Paper><h2>Authenticated</h2></Paper>}
+        </div>
+    );
 }
 
-export default App;
+const GlobalStyle = createGlobalStyle`
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #444;
+    font-family: Roboto, "helvetica neue", sans-serif;
+  }
+
+  a, a:visited, a:focus, a:hover {
+    text-decoration: none;
+    color: white;
+  }
+
+  .MuiTypography-h6 {
+    a, a:visited, a:focus, a:hover {
+      color: white;
+    }
+  }
+`;
+

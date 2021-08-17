@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "client": "cd client && npm start",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },

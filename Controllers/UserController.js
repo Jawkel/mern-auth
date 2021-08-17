@@ -22,7 +22,7 @@ export const login = (req, res) => {
 
     // User logged in while having a Refresh Token (shouldn't happen except during tests)
     if (refresh_token) {
-        tokenRepo.findAndDelete({token: refresh_token}).then((token) => {
+        tokenRepo.findAndDelete({token: refresh_token}).then((_) => {
             res.cookie("refresh_token", "", {
                 httpOnly: true,
                 secure: false,
@@ -116,7 +116,7 @@ export const logout = (req, res) => {
 
     return tokenRepo
         .findAndDelete({token: refresh_token})
-        .then((token) => {
+        .then((_) => {
             res.cookie("refresh_token", "", {
                 httpOnly: true,
                 secure: false,
@@ -151,9 +151,9 @@ const generateTokens = (user) => {
         token: refreshToken,
         valid: true,
         expiresAt: Date.now() + ms(process.env.REFRESH_EXPIRES)
-    }).then(token => {
+    }).then(_ => {
         return {accessToken, refreshToken};
-    }).catch(e => {
+    }).catch(_ => {
         return {};
     });
 };
@@ -163,7 +163,7 @@ const generateTokens = (user) => {
 ===== 1. Do we have a refreshToken in the httpSecure Cookie
 ===== 2. Is it our refreshToken (jwt verify)
 ===== 3. Is it expired ? (jwt verify)
-===== 4. Does the user still exist?
+===== 4. Optional, on a Project basis. Does the user still exist?
 ==================*/
 export const refreshToken = (req, res) => {
     const {refresh_token} = req.cookies;
@@ -178,7 +178,7 @@ export const refreshToken = (req, res) => {
             if (!token || !token.valid) {
                 return tokenRepo
                     .findAndDelete({token: token.token})
-                    .then((tokenDeleted) => res.status(401).json({message: `Token Invalid or Revoked`}));
+                    .then((_) => res.status(401).json({message: `Token Invalid or Revoked`}));
             }
             // If not, let's send back an accessToken
             const accessToken = jwt.sign(
@@ -201,8 +201,8 @@ export const refreshToken = (req, res) => {
         if (e.name === "TokenExpiredError") {
             tokenRepo
                 .findAndDelete({token: refresh_token})
-                .then((token) => {
-                    if (!token.valid) throw new Error("Token Expired");
+                .then((_) => {
+                    throw new Error("Token Expired");
                 })
                 .catch((e) => console.log(e));
         }
