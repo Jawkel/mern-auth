@@ -1,16 +1,12 @@
-import React, {useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {useHistory} from "react-router-dom";
+import React from "react";
 import {
     AppBar,
     Box,
     Toolbar,
     Typography,
     IconButton,
-    InputBase,
     Badge,
-    MenuItem,
-    Menu,
+    MenuItem, InputBase,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
@@ -19,123 +15,19 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import {styled, alpha} from "@material-ui/core/styles";
 import BLAvatar from "./BLAvatar";
-import {logout as logUserOut} from "../../actions/authActions";
+import {useMenu} from "./useMenu";
 
 const NavBar = () => {
-    const {user} = useSelector((state) => state.auth);
-    const dispatch = useDispatch();
-    const history = useHistory();
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-    const handleProfileMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleMobileMenuClose = () => {
-        setMobileMoreAnchorEl(null);
-    };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-        handleMobileMenuClose();
-    };
-
-    const handleMobileMenuOpen = (event) => {
-        setMobileMoreAnchorEl(event.currentTarget);
-    };
-
-    const menuId = "primary-search-account-menu";
-
-    const renderMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-            }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-            }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            {user ? (
-                <MenuItem
-                    onClick={() => {
-                        handleMenuClose();
-                        logout();
-                    }}
-                >
-                    Logout
-                </MenuItem>
-            ) : (
-                <MenuItem onClick={handleMenuClose}>
-                    Login
-                </MenuItem>
-            )}
-        </Menu>
-    );
-
-    const mobileMenuId = "primary-search-account-menu-mobile";
-    const renderMobileMenu = (
-        <Menu
-            anchorEl={mobileMoreAnchorEl}
-            anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-            }}
-            id={mobileMenuId}
-            keepMounted
-            transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-            }}
-            open={isMobileMenuOpen}
-            onClose={handleMobileMenuClose}
-        >
-            <MenuItem>
-                <IconButton
-                    size="large"
-                    aria-label="show 2 new notifications"
-                    color="inherit"
-                >
-                    <Badge badgeContent={2} color="error">
-                        <NotificationsIcon/>
-                    </Badge>
-                </IconButton>
-                <p>Notifications</p>
-            </MenuItem>
-            <MenuItem onClick={handleProfileMenuOpen}>
-                <IconButton
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    {user ? (
-                        <BLAvatar name={user.name} src={user?.imageUrl}/>
-                    ) : (
-                        <AccountCircle/>
-                    )}
-                </IconButton>
-                <p>Profile</p>
-            </MenuItem>
-        </Menu>
-    );
-
-    const logout = () => {
-        dispatch(logUserOut());
-        history.push("/login");
-    };
+    const {
+        user,
+        menuId,
+        mobileMenuId,
+        handleMobileMenuOpen,
+        handleProfileMenuOpen,
+        renderMenu,
+        renderMobileMenu
+    } = useMenu();
 
     return (
         <Box sx={{flexGrow: 1}}>
@@ -158,26 +50,8 @@ const NavBar = () => {
                     >
                         MERN Auth
                     </Typography>
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon/>
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{"aria-label": "search"}}
-                        />
-                    </Search>
                     <Box sx={{flexGrow: 1}}/>
                     <Box sx={{display: {xs: "none", md: "flex"}}}>
-                        <IconButton
-                            size="large"
-                            aria-label="show 2 new notifications"
-                            color="inherit"
-                        >
-                            <Badge badgeContent={2} color="error">
-                                <NotificationsIcon/>
-                            </Badge>
-                        </IconButton>
                         <IconButton
                             edge="end"
                             aria-label="account of current user"
