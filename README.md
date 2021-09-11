@@ -1,6 +1,6 @@
 # MERN AUTH
 
-Basic authentication system with Access Token + Refresh Token *WITHOUT using localStorage
+Basic authentication system with Access Token + Refresh Token **WITHOUT** using localStorage
 
 ## Configuration
 
